@@ -1,0 +1,64 @@
+#include <iostream>
+
+using namespace std;
+
+class Quote{
+public:
+	// Default Constructor
+	Quote() = default;
+	
+	// Constructor
+	Quote(int val): price(val){}
+	
+	// Destructor
+	virtual ~Quote(){};
+
+	// Net Price
+	virtual double net_price(size_t num) const {return num * price;}
+
+	// Set Price
+	void set_price(int val){price = val;};
+
+	// Return Price
+	double get_price(){return price;}
+
+private:
+	string product;
+protected:
+	double price = 0;
+
+};
+
+class Discount : public Quote{
+public:
+	Discount(int val, int rt): Quote(val), disc_rt(rt) {}
+	// Net Price
+	double net_price(size_t num) const;
+private:
+	double disc_rt;
+};
+
+double Discount::net_price(size_t num) const {
+	auto temp = price * num; 
+	if(num < 6){
+		return temp - (temp * (disc_rt / 100));
+	} else {
+		return temp;
+	}
+}
+
+double print_total(ostream &os, const Quote &item){
+
+	os << "Item Total: " << item.net_price(7) << endl;
+
+}
+	
+int main(){
+	
+	Quote Ex(12);
+	Discount Ex1(12, 25);
+	print_total(cout, Ex);
+	print_total(cout, Ex1);
+	return 0;
+
+}
